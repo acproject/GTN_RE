@@ -109,11 +109,11 @@ namespace gtn {
     void addGrad(const Graph& other);
 
     bool calcGrad() const  {
-        return sharedGraph_-> calcGrad;
+        return sharedGrad_-> calcGrad;
     }
 
     bool isGradAvilable() const {
-        return sharedGraph_->grad != nullptr;
+        return sharedGrad_->grad != nullptr;
     }
 
     Graph& grad();
@@ -127,17 +127,17 @@ namespace gtn {
     std::uintptr_t id();
 
     GradFunc gradFunc() {
-        return sharedGraph_->gradFunc;
-    }
+        return sharedGrad_->gradFunc;
+    };
 
     void setGradFunc(GradFunc gradFunc) {
         if(calcGrad()) {
-            sharedGraph_->gradFunc = gradFunc;
+            sharedGrad_->gradFunc = gradFunc;
         }
     }
 
     std::vector<Graph>& inputs() {
-        return sharedGraph_->inputs;
+        return sharedGrad_->inputs;
     }
 
     Graph withoutWeights() const {
@@ -257,10 +257,16 @@ namespace gtn {
        // 此对象的线程锁
        std::mutex grad_lock;
     };
+    struct SharedGrad {
+        GradFunc gradFunc{nullptr};
+        std::vector<Graph> inputs;
+        std::unique_ptr<GradFunc> grad{nullptr};
+        bool calcGrad;
+    };
 
     std::shared_ptr<SharedGraph> sharedGraph_{std::make_shared<SharedGraph>()};
 
-    std:;shared_ptr<std::vector<float>> sharedWeights_{
+    std::shared_ptr<std::vector<float>> sharedWeights_{
         std::make_shared<std::vector<float>>()
     };
     std::shared_ptr<SharedGrad> sharedGrad_{std::make_shared<SharedGrad>()};
