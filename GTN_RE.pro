@@ -24,12 +24,14 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
         gtn_re.cpp \
-    graph.cpp
+    graph.cpp \
+    autograd.cpp
 
 HEADERS += \
         gtn_re.h \
         gtn_re_global.h \ 
-    graph.h
+    graph.h \
+    autograd.h
 
 unix {
     target.path = /usr/lib
